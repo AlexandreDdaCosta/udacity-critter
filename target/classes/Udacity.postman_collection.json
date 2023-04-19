@@ -1,0 +1,2770 @@
+{
+	"info": {
+		"_postman_id": "4e739f52-1f0e-4d6f-b4cd-e92ba696d46a",
+		"name": "Udacity",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26297131"
+	},
+	"item": [
+		{
+			"name": "Reset all collection variables",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.unset(\"first_customer_id\");",
+							"pm.collectionVariables.unset(\"first_customer_note_id\");",
+							"pm.collectionVariables.unset(\"second_customer_id\");",
+							"pm.collectionVariables.unset(\"first_employee_id\");",
+							"pm.collectionVariables.unset(\"first_employee_note_id\");",
+							"pm.collectionVariables.unset(\"second_employee_id\");",
+							"pm.collectionVariables.unset(\"first_pet_id\");",
+							"pm.collectionVariables.unset(\"first_pet_note_id\");",
+							"pm.collectionVariables.unset(\"second_pet_id\");",
+							"pm.collectionVariables.unset(\"first_schedule_date\");",
+							"pm.collectionVariables.unset(\"first_schedule_id\");",
+							"pm.collectionVariables.unset(\"first_schedule_notes\");",
+							"pm.collectionVariables.unset(\"first_schedule_service_cost\");",
+							"pm.collectionVariables.unset(\"second_schedule_id\");",
+							"pm.collectionVariables.unset(\"second_schedule_notes\");",
+							"pm.collectionVariables.unset(\"second_schedule_service_cost\");",
+							"pm.collectionVariables.unset(\"second_schedule_start_time\");",
+							"pm.collectionVariables.unset(\"second_schedule_end_time\");",
+							"pm.collectionVariables.unset(\"second_schedule_status\");",
+							"pm.collectionVariables.unset(\"second_schedule_date\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://www.postman-echo.com/delay/0\n",
+					"protocol": "https",
+					"host": [
+						"www",
+						"postman-echo",
+						"com"
+					],
+					"path": [
+						"delay",
+						"0\n"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create First Employee",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonResponse = pm.response.json();",
+							"pm.collectionVariables.set(\"first_employee_id\", jsonResponse.id);",
+							"pm.collectionVariables.set(\"first_employee_name\", jsonResponse.name);",
+							"pm.collectionVariables.set(\"first_employee_archived\", jsonResponse.archived);",
+							"pm.collectionVariables.set(\"first_employee_note_id\", jsonResponse.noteId);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{$randomFirstName}} {{$timestamp}}\",\r\n    \"archived\": true,\r\n    \"noteDescription\": \"First employee create note description\",\r\n    \"noteText\": \"First employee create note text\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/user/employee",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"user",
+						"employee"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get First Employee",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_employee_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_employee_id\") != null) ",
+							"{",
+							"    var jsonResponse = pm.response.json();",
+							"    pm.expect(pm.collectionVariables.get(\"first_employee_name\")).to.eql(jsonResponse.name);",
+							"    pm.expect(pm.collectionVariables.get(\"first_employee_archived\")).to.eql(jsonResponse.archived);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/user/employee/{{first_employee_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"user",
+						"employee",
+						"{{first_employee_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get First Employee Create Note",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_employee_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/user/employee/{{first_employee_id}}/note/{{first_employee_note_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"user",
+						"employee",
+						"{{first_employee_id}}",
+						"note",
+						"{{first_employee_note_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update First Employee Create Note",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_employee_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"{{first_employee_note_id}}\",\n    \"employeeId\": \"{{first_employee_id}}\",\n    \"description\": \"First employee create note description, updated\",\n    \"note\": \"First employee create note text, updated\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8082/user/employee/note",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"user",
+						"employee",
+						"note"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update First Employee",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonResponse = pm.response.json();",
+							"pm.collectionVariables.set(\"first_employee_name\", jsonResponse.name);",
+							"pm.collectionVariables.set(\"first_employee_archived\", jsonResponse.archived);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_employee_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": {{first_employee_id}},\n    \"name\": \"{{$randomFirstName}} {{$timestamp}}\",\n    \"skills\": [\n        \"BATHING\",\n        \"FEEDING\",\n        \"GROOMING\",\n        \"MEDICATING\",\n        \"PETTING\",\n        \"WALKING\"\n    ],\n    \"daysAvailable\": [\n        \"MONDAY\",\n        \"TUESDAY\",\n        \"WEDNESDAY\",\n        \"THURSDAY\"\n    ],\n    \"archived\": false,\n    \"noteDescription\": \"First employee update note description\",\n    \"noteText\": \"First employee update note text\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8082/user/employee",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"user",
+						"employee"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get First Employee Notes",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_employee_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/user/employee/{{first_employee_id}}/note",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"user",
+						"employee",
+						"{{first_employee_id}}",
+						"note"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get First Employee Note IDs",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_employee_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/user/employee/{{first_employee_id}}/noteid",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"user",
+						"employee",
+						"{{first_employee_id}}",
+						"noteid"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Second Employee",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonResponse = pm.response.json();",
+							"pm.collectionVariables.set(\"second_employee_id\", jsonResponse.id);",
+							"pm.collectionVariables.set(\"second_employee_name\", jsonResponse.name);",
+							"pm.collectionVariables.set(\"second_employee_archived\", jsonResponse.archived);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{$randomFirstName}} {{$timestamp}}\",\n    \"skills\": [\n        \"AGILITY\",\n        \"BATHING\",\n        \"GROOMING\",\n        \"WALKING\"\n    ],\n    \"daysAvailable\": [\n        \"WEDNESDAY\",\n        \"THURSDAY\",\n        \"FRIDAY\",\n        \"SATURDAY\"\n    ],\n    \"noteDescription\": \"Second employee create note description\",\n    \"noteText\": \"Second employee create note text\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8082/user/employee",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"user",
+						"employee"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Second Employee",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"second_employee_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"} "
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"second_employee_id\") != null) ",
+							"{",
+							"    var jsonResponse = pm.response.json();",
+							"    pm.expect(pm.collectionVariables.get(\"second_employee_name\")).to.eql(jsonResponse.name);",
+							"    pm.expect(pm.collectionVariables.get(\"second_employee_archived\")).to.eql(jsonResponse.archived);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/user/employee/{{second_employee_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"user",
+						"employee",
+						"{{second_employee_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Employees",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/user/employee",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"user",
+						"employee"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create First Customer",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonResponse = pm.response.json();",
+							"pm.collectionVariables.set(\"first_customer_id\", jsonResponse.id);",
+							"pm.collectionVariables.set(\"first_customer_name\", jsonResponse.name);",
+							"pm.collectionVariables.set(\"first_customer_phone_number\", jsonResponse.phoneNumber);",
+							"pm.collectionVariables.set(\"first_customer_archived\", jsonResponse.archived);",
+							"pm.collectionVariables.set(\"first_customer_note_id\", jsonResponse.noteId);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"{{$randomFirstName}} {{$timestamp}}\",\r\n  \"phoneNumber\": \"{{$randomPhoneNumber}}\",\r\n  \"archived\": true,\r\n  \"noteDescription\": \"First customer create note description\",\r\n  \"noteText\": \"First customer create note text\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/user/customer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"user",
+						"customer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get First Customer",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_customer_id\") != null) ",
+							"{",
+							"    var jsonResponse = pm.response.json();",
+							"    pm.expect(pm.collectionVariables.get(\"first_customer_name\")).to.eql(jsonResponse.name);",
+							"    pm.expect(pm.collectionVariables.get(\"first_customer_phone_number\")).to.eql(jsonResponse.phoneNumber);",
+							"    pm.expect(pm.collectionVariables.get(\"first_customer_archived\")).to.eql(jsonResponse.archived);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_customer_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"} "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/user/customer/{{first_customer_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"user",
+						"customer",
+						"{{first_customer_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get First Customer Create Note",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_customer_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/user/customer/{{first_customer_id}}/note/{{first_customer_note_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"user",
+						"customer",
+						"{{first_customer_id}}",
+						"note",
+						"{{first_customer_note_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update First Customer Create Note",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_customer_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"{{first_customer_note_id}}\",\n    \"customerId\": \"{{first_customer_id}}\",\n    \"description\": \"First customer create note description, updated\",\n    \"note\": \"First customer create note text, updated\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8082/user/customer/note",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"user",
+						"customer",
+						"note"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update First Customer",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonResponse = pm.response.json();",
+							"pm.collectionVariables.set(\"first_customer_name\", jsonResponse.name);",
+							"pm.collectionVariables.set(\"first_customer_phone_number\", jsonResponse.phoneNumber);",
+							"pm.collectionVariables.set(\"first_customer_archived\", jsonResponse.archived);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_customer_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"id\": {{first_customer_id}},\n  \"name\": \"{{$randomFirstName}} {{$timestamp}}\",\n  \"phoneNumber\": \"{{$randomPhoneNumber}}\",\n  \"archived\": false,\n  \"noteDescription\": \"First customer update note description\",\n  \"noteText\": \"First customer update note text\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8082/user/customer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"user",
+						"customer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get First Customer Notes",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_customer_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/user/customer/{{first_customer_id}}/note",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"user",
+						"customer",
+						"{{first_customer_id}}",
+						"note"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get First Customer Note IDs",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_customer_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/user/customer/{{first_customer_id}}/noteid",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"user",
+						"customer",
+						"{{first_customer_id}}",
+						"noteid"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Second Customer",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonResponse = pm.response.json();",
+							"pm.collectionVariables.set(\"second_customer_id\", jsonResponse.id);",
+							"pm.collectionVariables.set(\"second_customer_name\", jsonResponse.name);",
+							"pm.collectionVariables.set(\"second_customer_phone_number\", jsonResponse.phoneNumber);",
+							"pm.collectionVariables.set(\"second_customer_archived\", jsonResponse.archived);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"{{$randomFirstName}} {{$timestamp}}\",\n  \"phoneNumber\": \"{{$randomPhoneNumber}}\",\n  \"archived\": false,\n  \"noteDescription\": \"Second customer create note description\",\n  \"noteText\": \"Second customer create note text\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8082/user/customer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"user",
+						"customer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Second Customer",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"second_customer_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"second_customer_id\") != null) ",
+							"{",
+							"    var jsonResponse = pm.response.json();",
+							"    pm.expect(pm.collectionVariables.get(\"second_customer_name\")).to.eql(jsonResponse.name);",
+							"    pm.expect(pm.collectionVariables.get(\"second_customer_phone_number\")).to.eql(jsonResponse.phoneNumber);",
+							"    pm.expect(pm.collectionVariables.get(\"second_customer_archived\")).to.eql(jsonResponse.archived);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/user/customer/{{second_customer_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"user",
+						"customer",
+						"{{second_customer_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create First Pet",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_customer_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"} "
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonResponse = pm.response.json();",
+							"pm.collectionVariables.set(\"first_pet_id\", jsonResponse.id);",
+							"pm.collectionVariables.set(\"first_pet_name\", jsonResponse.name);",
+							"pm.collectionVariables.set(\"first_pet_type\", jsonResponse.type);",
+							"pm.collectionVariables.set(\"first_pet_birthdate\", jsonResponse.birthDate);",
+							"",
+							"pm.collectionVariables.set(\"first_pet_breed\", jsonResponse.breedOrSpecies);",
+							"pm.collectionVariables.set(\"first_pet_archived\", jsonResponse.archived);",
+							"pm.collectionVariables.set(\"first_pet_note_id\", jsonResponse.noteId);",
+							"pm.collectionVariables.set(\"first_pet_owner_id\", jsonResponse.ownerId);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"type\": \"UNICORN\",\r\n  \"name\": \"{{$randomFirstName}} {{$timestamp}}\",\r\n  \"ownerId\": \"{{first_customer_id}}\",\r\n  \"breedOrSpecies\": \"Mythological beast\",\r\n  \"birthDate\": \"2005/01/01\",\r\n  \"archived\": true,\r\n  \"noteDescription\": \"First pet create note description\",\r\n  \"noteText\": \"First pet create note text\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/pet",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"pet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get First Pet",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_pet_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"} "
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_pet_id\") != null) ",
+							"{",
+							"    var jsonResponse = pm.response.json();",
+							"    pm.expect(pm.collectionVariables.get(\"first_pet_name\")).to.eql(jsonResponse.name);",
+							"    pm.expect(pm.collectionVariables.get(\"first_pet_type\")).to.eql(jsonResponse.type);",
+							"    pm.expect(pm.collectionVariables.get(\"first_pet_birthdate\")).to.eql(jsonResponse.birthDate);",
+							"    pm.expect(pm.collectionVariables.get(\"first_pet_breed\")).to.eql(jsonResponse.breedOrSpecies);",
+							"    pm.expect(pm.collectionVariables.get(\"first_pet_archived\")).to.eql(jsonResponse.archived);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/pet/{{first_pet_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"pet",
+						"{{first_pet_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get First Pet Create Note",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_pet_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/pet/{{first_pet_id}}/note/{{first_pet_note_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"pet",
+						"{{first_pet_id}}",
+						"note",
+						"{{first_pet_note_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update First Pet Create Note",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_pet_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"{{first_pet_note_id}}\",\n    \"petId\": \"{{first_pet_id}}\",\n    \"description\": \"First pet create note description, updated\",\n    \"note\": \"First pet create note text, updated\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8082/pet/note",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"pet",
+						"note"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update First Pet",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonResponse = pm.response.json();",
+							"pm.collectionVariables.set(\"first_pet_id\", jsonResponse.id);",
+							"pm.collectionVariables.set(\"first_pet_name\", jsonResponse.name);",
+							"pm.collectionVariables.set(\"first_pet_type\", jsonResponse.type);",
+							"pm.collectionVariables.set(\"first_pet_birthdate\", jsonResponse.birthDate);",
+							"",
+							"pm.collectionVariables.set(\"first_pet_breed\", jsonResponse.breedOrSpecies);",
+							"pm.collectionVariables.set(\"first_pet_archived\", jsonResponse.archived);",
+							"pm.collectionVariables.set(\"first_pet_note_id\", jsonResponse.noteId);",
+							"pm.collectionVariables.set(\"first_pet_owner_id\", jsonResponse.ownerId);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_pet_id\") == null",
+							"|| pm.collectionVariables.get(\"second_customer_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"} "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"id\": {{first_pet_id}},\n  \"type\": \"DRAGON\",\n  \"name\": \"{{$randomFirstName}} {{$timestamp}}\",\n  \"ownerId\": {{second_customer_id}},\n  \"birthDate\": \"2022/01/01\",\n  \"archived\": false,\n  \"noteDescription\": \"First pet update note description\",\n  \"noteText\": \"First pet update note text\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8082/pet",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"pet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get First Pet Notes",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_pet_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/pet/{{first_pet_id}}/note",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"pet",
+						"{{first_pet_id}}",
+						"note"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get First Pet Note IDs",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_pet_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/pet/{{first_pet_id}}/noteid",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"pet",
+						"{{first_pet_id}}",
+						"noteid"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Second Pet",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"second_customer_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"} "
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonResponse = pm.response.json();",
+							"pm.collectionVariables.set(\"second_pet_id\", jsonResponse.id);",
+							"pm.collectionVariables.set(\"second_pet_name\", jsonResponse.name);",
+							"pm.collectionVariables.set(\"second_pet_type\", jsonResponse.type);",
+							"pm.collectionVariables.set(\"second_pet_birthdate\", jsonResponse.birthDate);",
+							"",
+							"pm.collectionVariables.set(\"second_pet_breed\", jsonResponse.breedOrSpecies);",
+							"pm.collectionVariables.set(\"second_pet_archived\", jsonResponse.archived);",
+							"pm.collectionVariables.set(\"second_pet_note_id\", jsonResponse.noteId);",
+							"pm.collectionVariables.set(\"second_pet_owner_id\", jsonResponse.ownerId);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"type\": \"DRAGON\",\r\n  \"name\": \"{{$randomFirstName}} {{$timestamp}}\",\r\n  \"ownerId\": \"{{second_customer_id}}\",\r\n  \"birthDate\": \"2021/01/01\",\r\n  \"archived\": false,\r\n  \"noteDescription\": \"Second pet create note description\",\r\n  \"noteText\": \"Second pet create note text\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/pet",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"pet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Second Pet",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"second_pet_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"} "
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"second_pet_id\") != null) ",
+							"{",
+							"    var jsonResponse = pm.response.json();",
+							"    pm.expect(pm.collectionVariables.get(\"second_pet_name\")).to.eql(jsonResponse.name);",
+							"    pm.expect(pm.collectionVariables.get(\"second_pet_type\")).to.eql(jsonResponse.type);",
+							"    pm.expect(pm.collectionVariables.get(\"second_pet_birthdate\")).to.eql(jsonResponse.birthDate);",
+							"    pm.expect(pm.collectionVariables.get(\"second_pet_breed\")).to.eql(jsonResponse.breedOrSpecies);",
+							"    pm.expect(pm.collectionVariables.get(\"second_customer_id\")).to.eql(jsonResponse.ownerId);",
+							"    pm.expect(pm.collectionVariables.get(\"second_pet_archived\")).to.eql(jsonResponse.archived);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/pet/{{second_pet_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"pet",
+						"{{second_pet_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Customers",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/user/customer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"user",
+						"customer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Pets",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/pet",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"pet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Pets By Owner",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"second_customer_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/pet/owner/{{second_customer_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"pet",
+						"owner",
+						"{{second_customer_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Owner By Pet",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_pet_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/user/customer/pet/{{first_pet_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"user",
+						"customer",
+						"pet",
+						"{{first_pet_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update First Employee Availability",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_employee_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\"MONDAY\", \"TUESDAY\", \"WEDNESDAY\", \"THURSDAY\", \"FRIDAY\"]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/user/employee/{{first_employee_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"user",
+						"employee",
+						"{{first_employee_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check Employee Availability",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"date\": \"2023/07/03\",\n\t\"skills\": [\"PETTING\", \"FEEDING\", \"WALKING\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/user/employee/availability",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"user",
+						"employee",
+						"availability"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create First Schedule No Time",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_employee_id\") == null",
+							"|| pm.collectionVariables.get(\"first_pet_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_employee_id\") != null",
+							"&& pm.collectionVariables.get(\"first_pet_id\") != null) ",
+							"{",
+							"    var jsonResponse = pm.response.json();",
+							"    pm.collectionVariables.set(\"first_schedule_id\", jsonResponse.id);",
+							"    pm.collectionVariables.set(\"first_schedule_date\", jsonResponse.date);",
+							"    pm.collectionVariables.set(\"first_schedule_notes\", jsonResponse.notes);",
+							"    pm.collectionVariables.set(\"first_schedule_service_cost\", jsonResponse.serviceCost);",
+							"    pm.expect(\"PENDING\").to.eql(jsonResponse.status);",
+							"    pm.expect(\"2023/07/03\").to.eql(jsonResponse.date);",
+							"    pm.expect(\"First pet first employee first schedule create notes\").to.eql(jsonResponse.notes);",
+							"    pm.expect(jsonResponse.employeeIds).to.include(pm.collectionVariables.get(\"first_employee_id\"));",
+							"    pm.expect(jsonResponse.petIds).to.include(pm.collectionVariables.get(\"first_pet_id\"));",
+							"    pm.expect(jsonResponse.serviceCost).not.eql(null);",
+							"    pm.expect(jsonResponse.activities).to.include(\"PETTING\");",
+							"    pm.expect(jsonResponse.activities).to.include(\"FEEDING\");",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"activities\": [\n        \"PETTING\",\n        \"FEEDING\"\n    ],\n    \"date\" : \"2023/07/03\",\n    \"employeeIds\": [{{first_employee_id}}],\n    \"notes\": \"First pet first employee first schedule create notes\",\n    \"petIds\": [{{first_pet_id}}]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/schedule",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"schedule"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get First Schedule",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_schedule_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_schedule_id\") != null) ",
+							"{",
+							"    var jsonResponse = pm.response.json();",
+							"    pm.expect(jsonResponse.id).to.eql(pm.collectionVariables.get(\"first_schedule_id\"));",
+							"    pm.expect(pm.collectionVariables.get(\"first_schedule_date\")).to.eql(jsonResponse.date);",
+							"    pm.expect(jsonResponse.notes).to.eql(pm.collectionVariables.get(\"first_schedule_notes\"));",
+							"    pm.expect(jsonResponse.serviceCost).to.eql(pm.collectionVariables.get(\"first_schedule_service_cost\"));",
+							"    pm.expect(\"PENDING\").to.eql(jsonResponse.status);",
+							"    pm.expect(jsonResponse.employeeIds).to.include(pm.collectionVariables.get(\"first_employee_id\"));",
+							"    pm.expect(jsonResponse.petIds).to.include(pm.collectionVariables.get(\"first_pet_id\"));",
+							"    pm.expect(jsonResponse.serviceCost).not.eql(null);",
+							"    pm.expect(jsonResponse.activities).to.include(\"PETTING\");",
+							"    pm.expect(jsonResponse.activities).to.include(\"FEEDING\");",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/schedule/{{first_schedule_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"schedule",
+						"{{first_schedule_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update First Schedule No Time",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_schedule_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_schedule_id\") != null) ",
+							"{",
+							"    var jsonResponse = pm.response.json();",
+							"    pm.expect(\"PENDING\").to.eql(jsonResponse.status);",
+							"    pm.expect(\"2023/07/04\").to.eql(jsonResponse.date);",
+							"    pm.expect(\"First pet first employee first schedule update notes\").to.eql(jsonResponse.notes);",
+							"    pm.expect(jsonResponse.employeeIds).to.include(pm.collectionVariables.get(\"first_employee_id\"));",
+							"    pm.expect(jsonResponse.petIds).to.include(pm.collectionVariables.get(\"first_pet_id\"));",
+							"    pm.expect(jsonResponse.activities).to.include(\"PETTING\");",
+							"    pm.expect(jsonResponse.activities).to.include(\"FEEDING\");",
+							"    pm.expect(jsonResponse.activities).to.include(\"WALKING\");",
+							"    pm.collectionVariables.set(\"first_schedule_date\", jsonResponse.date);",
+							"    pm.collectionVariables.set(\"first_schedule_notes\", jsonResponse.notes);",
+							"    pm.collectionVariables.set(\"first_schedule_service_cost\", jsonResponse.serviceCost);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": {{first_schedule_id}},\n    \"activities\": [\n        \"PETTING\",\n        \"FEEDING\",\n        \"WALKING\"\n    ],\n    \"date\" : \"2023/07/04\",\n    \"employeeIds\": [{{first_employee_id}}],\n    \"notes\": \"First pet first employee first schedule update notes\",\n    \"petIds\": [{{first_pet_id}}]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8082/schedule",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"schedule"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get First Schedule Update",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_schedule_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_schedule_id\") != null) ",
+							"{",
+							"    var jsonResponse = pm.response.json();",
+							"    pm.expect(jsonResponse.id).to.eql(pm.collectionVariables.get(\"first_schedule_id\"));",
+							"    pm.expect(jsonResponse.date).to.eql(pm.collectionVariables.get(\"first_schedule_date\"));",
+							"    pm.expect(jsonResponse.notes).to.eql(pm.collectionVariables.get(\"first_schedule_notes\"));",
+							"    pm.expect(jsonResponse.serviceCost).to.eql(pm.collectionVariables.get(\"first_schedule_service_cost\"));",
+							"    pm.expect(\"PENDING\").to.eql(jsonResponse.status);",
+							"    pm.expect(jsonResponse.employeeIds).to.include(pm.collectionVariables.get(\"first_employee_id\"));",
+							"    pm.expect(jsonResponse.petIds).to.include(pm.collectionVariables.get(\"first_pet_id\"));",
+							"    pm.expect(jsonResponse.activities).to.include(\"PETTING\");",
+							"    pm.expect(jsonResponse.activities).to.include(\"FEEDING\");",
+							"    pm.expect(jsonResponse.activities).to.include(\"WALKING\");",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/schedule/{{first_schedule_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"schedule",
+						"{{first_schedule_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Second Schedule, Preview",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_employee_id\") == null",
+							"|| pm.collectionVariables.get(\"first_pet_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_employee_id\") != null",
+							"&& pm.collectionVariables.get(\"first_pet_id\") != null) ",
+							"{",
+							"    var jsonResponse = pm.response.json();",
+							"    pm.collectionVariables.set(\"second_schedule_date\", jsonResponse.date);",
+							"    pm.collectionVariables.set(\"second_schedule_notes\", jsonResponse.notes);",
+							"    pm.collectionVariables.set(\"second_schedule_service_cost\", jsonResponse.serviceCost);",
+							"    pm.collectionVariables.set(\"second_schedule_start_time\", jsonResponse.startTime);",
+							"    pm.collectionVariables.set(\"second_schedule_end_time\", jsonResponse.endTime);",
+							"    pm.collectionVariables.set(\"second_schedule_status\", jsonResponse.status);",
+							"    pm.expect(jsonResponse.activities).to.include(\"PETTING\");",
+							"    pm.expect(jsonResponse.activities).to.include(\"FEEDING\");",
+							"    pm.expect(jsonResponse.activities).to.include(\"WALKING\");",
+							"    pm.expect(\"2023/07/05\").to.eql(jsonResponse.date);",
+							"    pm.expect(jsonResponse.employeeIds).to.include(pm.collectionVariables.get(\"first_employee_id\"));",
+							"    pm.expect(jsonResponse.petIds).to.include(pm.collectionVariables.get(\"first_pet_id\"));",
+							"    pm.expect(jsonResponse.id).to.eql(0);",
+							"    pm.expect(\"First pet first employee second schedule create notes\").to.eql(jsonResponse.notes);",
+							"    pm.expect(jsonResponse.preview).to.eql(true);",
+							"    pm.expect(jsonResponse.serviceCost).not.eql(null);",
+							"    pm.expect(\"PENDING\").to.eql(jsonResponse.status);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"activities\": [\n        \"PETTING\",\n        \"FEEDING\",\n        \"WALKING\"\n    ],\n    \"date\" : \"2023/07/05\",\n    \"employeeIds\": [{{first_employee_id}}],\n    \"notes\": \"First pet first employee second schedule create notes\",\n    \"preview\": true,\n    \"petIds\": [{{first_pet_id}}],\n    \"startTime\": \"09:00\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/schedule",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"schedule"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Second Schedule",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_employee_id\") == null",
+							"|| pm.collectionVariables.get(\"first_pet_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_employee_id\") != null",
+							"&& pm.collectionVariables.get(\"first_pet_id\") != null) ",
+							"{",
+							"    var jsonResponse = pm.response.json();",
+							"    pm.expect(jsonResponse.activities).to.include(\"PETTING\");",
+							"    pm.expect(jsonResponse.activities).to.include(\"FEEDING\");",
+							"    pm.expect(jsonResponse.activities).to.include(\"WALKING\");",
+							"    pm.expect(\"2023/07/05\").to.eql(jsonResponse.date);",
+							"    pm.expect(jsonResponse.date).to.eql(pm.collectionVariables.get(\"second_schedule_date\"));",
+							"    pm.expect(jsonResponse.employeeIds).to.include(pm.collectionVariables.get(\"first_employee_id\"));",
+							"    pm.expect(jsonResponse.petIds).to.include(pm.collectionVariables.get(\"first_pet_id\"));",
+							"    pm.expect(jsonResponse.id).not.eql(null);",
+							"    pm.expect(jsonResponse.notes).to.eql(pm.collectionVariables.get(\"second_schedule_notes\"));",
+							"    pm.expect(jsonResponse.preview).to.eql(false);",
+							"    pm.expect(jsonResponse.serviceCost).to.eql(pm.collectionVariables.get(\"second_schedule_service_cost\"));",
+							"    pm.expect(jsonResponse.startTime).to.eql(pm.collectionVariables.get(\"second_schedule_start_time\"));",
+							"    pm.expect(jsonResponse.endTime).to.eql(pm.collectionVariables.get(\"second_schedule_end_time\"));",
+							"    pm.expect(jsonResponse.status).to.eql(pm.collectionVariables.get(\"second_schedule_status\"));",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"activities\": [\n        \"PETTING\",\n        \"FEEDING\",\n        \"WALKING\"\n    ],\n    \"date\" : \"2023/07/05\",\n    \"employeeIds\": [{{first_employee_id}}],\n    \"notes\": \"First pet first employee second schedule create notes\",\n    \"petIds\": [{{first_pet_id}}],\n    \"startTime\": \"09:00\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/schedule",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"schedule"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find Schedule By Employee",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_employee_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/schedule/employee/{{first_employee_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"schedule",
+						"employee",
+						"{{first_employee_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find Schedule By Owner",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"second_customer_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"} "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/schedule/customer/{{second_customer_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"schedule",
+						"customer",
+						"{{second_customer_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find Schedule By Pet",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_pet_id\") == null) ",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"} "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/schedule/pet/{{first_pet_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"schedule",
+						"pet",
+						"{{first_pet_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find All Employees",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/user/employee",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"user",
+						"employee"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find All Employees For Service",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"date\" : \"2023/07/05\",\n    \"skills\": [\n        \"GROOMING\",\n        \"WALKING\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/user/employee/availability",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"user",
+						"employee",
+						"availability"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find All Schedules",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/schedule",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"schedule"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find All Schedules, First Employee, First Date",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"first_employee_id\") == null ",
+							"|| pm.collectionVariables.get(\"first_schedule_date\") == null)",
+							"{",
+							"  pm.request.url = 'https://www.postman-echo.com/delay/0';",
+							"  pm.request.method = 'GET';",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"date\": \"{{first_schedule_date}}\",\n    \"employeeId\": {{first_employee_id}}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/schedule",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"schedule"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find Schedule Availability",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"activities\": [\n        \"WALKING\"\n    ],\n    \"date\" : \"2023/07/05\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/schedule/availability",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"schedule",
+						"availability"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "first_customer_name",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "first_customer_phone_number",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "first_customer_archived",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "second_customer_name",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "second_customer_phone_number",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "second_customer_archived",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "first_employee_id\n",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "first_employee_name",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "first_employee_note_id\n",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "first_employee_archived",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "second_employee_name",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "second_employee_archived",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "first_pet_id\nfirst_pet_first_customer_name",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "first_pet_name",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "first_pet_type",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "first_pet_breed",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "first_pet_birthdate",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "first_pet_owner_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "first_pet_archived",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "second_pet_name",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "second_pet_type",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "second_pet_breed",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "second_pet_birthdate",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "second_pet_owner_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "second_pet_archived",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "first_employee_id",
+			"value": ""
+		},
+		{
+			"key": "first_employee_note_id",
+			"value": ""
+		},
+		{
+			"key": "second_employee_id",
+			"value": ""
+		},
+		{
+			"key": "first_customer_id",
+			"value": ""
+		},
+		{
+			"key": "first_customer_note_id",
+			"value": ""
+		},
+		{
+			"key": "second_customer_id",
+			"value": ""
+		},
+		{
+			"key": "first_pet_id",
+			"value": ""
+		},
+		{
+			"key": "first_pet_note_id",
+			"value": ""
+		},
+		{
+			"key": "second_pet_id",
+			"value": ""
+		},
+		{
+			"key": "second_pet_note_id",
+			"value": ""
+		},
+		{
+			"key": "first_schedule_date",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "first_schedule_id",
+			"value": ""
+		},
+		{
+			"key": "first_schedule_notes",
+			"value": ""
+		},
+		{
+			"key": "first_schedule_service_cost",
+			"value": ""
+		},
+		{
+			"key": "second_schedule_id\n",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "second_schedule_notes",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "second_schedule_service_cost",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "second_schedule_start_time",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "second_schedule_end_time",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "second_schedule_status",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "second_schedule_date",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"value": "",
+			"type": "string",
+			"disabled": true
+		}
+	]
+}
